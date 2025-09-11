@@ -20,9 +20,9 @@ var _ MappedNullable = &BalanceGet200Response{}
 // BalanceGet200Response struct for BalanceGet200Response
 type BalanceGet200Response struct {
 	// Balance converted to fiat.
-	Value *float32 `json:"value,omitempty"`
+	Value *float64 `json:"value,omitempty"`
 	// Balance in BTC.
-	Balance *float32 `json:"balance,omitempty"`
+	Balance *float64 `json:"balance,omitempty"`
 }
 
 // NewBalanceGet200Response instantiates a new BalanceGet200Response object
@@ -43,9 +43,9 @@ func NewBalanceGet200ResponseWithDefaults() *BalanceGet200Response {
 }
 
 // GetValue returns the Value field value if set, zero value otherwise.
-func (o *BalanceGet200Response) GetValue() float32 {
+func (o *BalanceGet200Response) GetValue() float64 {
 	if o == nil || IsNil(o.Value) {
-		var ret float32
+		var ret float64
 		return ret
 	}
 	return *o.Value
@@ -53,7 +53,7 @@ func (o *BalanceGet200Response) GetValue() float32 {
 
 // GetValueOk returns a tuple with the Value field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *BalanceGet200Response) GetValueOk() (*float32, bool) {
+func (o *BalanceGet200Response) GetValueOk() (*float64, bool) {
 	if o == nil || IsNil(o.Value) {
 		return nil, false
 	}
@@ -69,15 +69,15 @@ func (o *BalanceGet200Response) HasValue() bool {
 	return false
 }
 
-// SetValue gets a reference to the given float32 and assigns it to the Value field.
-func (o *BalanceGet200Response) SetValue(v float32) {
+// SetValue gets a reference to the given float64 and assigns it to the Value field.
+func (o *BalanceGet200Response) SetValue(v float64) {
 	o.Value = &v
 }
 
 // GetBalance returns the Balance field value if set, zero value otherwise.
-func (o *BalanceGet200Response) GetBalance() float32 {
+func (o *BalanceGet200Response) GetBalance() float64 {
 	if o == nil || IsNil(o.Balance) {
-		var ret float32
+		var ret float64
 		return ret
 	}
 	return *o.Balance
@@ -85,7 +85,7 @@ func (o *BalanceGet200Response) GetBalance() float32 {
 
 // GetBalanceOk returns a tuple with the Balance field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *BalanceGet200Response) GetBalanceOk() (*float32, bool) {
+func (o *BalanceGet200Response) GetBalanceOk() (*float64, bool) {
 	if o == nil || IsNil(o.Balance) {
 		return nil, false
 	}
@@ -101,8 +101,8 @@ func (o *BalanceGet200Response) HasBalance() bool {
 	return false
 }
 
-// SetBalance gets a reference to the given float32 and assigns it to the Balance field.
-func (o *BalanceGet200Response) SetBalance(v float32) {
+// SetBalance gets a reference to the given float64 and assigns it to the Balance field.
+func (o *BalanceGet200Response) SetBalance(v float64) {
 	o.Balance = &v
 }
 

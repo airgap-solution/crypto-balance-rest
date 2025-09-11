@@ -16,10 +16,10 @@ package cryptobalancerest
 type BalanceGet200Response struct {
 
 	// Balance converted to fiat.
-	Value float32 `json:"value,omitempty"`
+	Value float64 `json:"value,omitempty"`
 
 	// Balance in BTC.
-	Balance float32 `json:"balance,omitempty"`
+	Balance float64 `json:"balance,omitempty"`
 }
 
 // AssertBalanceGet200ResponseRequired checks if the required fields are not zero-ed

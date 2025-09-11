@@ -1,7 +1,9 @@
 openapi: 3.0.3
 info:
   title: Bitcoin Balance API
-  version: 1.0.0
+  version: 1.0.1
+  # 1.0.1: Use doubles for fiat value and balance
+  # 1.0.0: Create contract
   description: |
     Derives Taproot addresses from an XPUB, checks balances via Electrum,
     and converts to a fiat currency using an external crypto rate service.
@@ -49,12 +51,12 @@ paths:
                 properties:
                   value:
                     type: number
-                    format: float
+                    format: double
                     description: Balance converted to fiat.
                     example: 35000.25
                   balance:
                     type: number
-                    format: float
+                    format: double
                     description: Balance in BTC.
                     example: 1.23456789
         "400":
