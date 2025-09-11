@@ -90,7 +90,15 @@ func NewConfiguration() *Configuration {
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
+				URL: "http://restartfu.com:8082",
+				Description: "No description provided",
+			},
+			{
 				URL: "http://192.168.2.130:8082",
+				Description: "No description provided",
+			},
+			{
+				URL: "http://localhost:8082",
 				Description: "No description provided",
 			},
 		},

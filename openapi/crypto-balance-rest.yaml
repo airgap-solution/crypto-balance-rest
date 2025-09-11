@@ -7,7 +7,9 @@ info:
     and converts to a fiat currency using an external crypto rate service.
 
 servers:
+  - url: http://restartfu.com:8082
   - url: http://192.168.2.130:8082
+  - url: http://localhost:8082
 
 paths:
   /balance:
