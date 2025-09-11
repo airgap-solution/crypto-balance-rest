@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: Bitcoin Balance API
+  version: 1.0.0
+  description: |
+    Derives Taproot addresses from an XPUB, checks balances via Electrum,
+    and converts to a fiat currency using an external crypto rate service.
+
+servers:
+  - url: http://192.168.2.130:8082
+
+paths:
+  /balance:
+    get:
+      summary: Get XPUB balance in BTC and fiat
+      description: |
+        Derives addresses from an XPUB, queries Electrum for balances,
+        and converts to the requested fiat currency using the crypto rate API.
+      parameters:
+        - in: query
+          name: xpub
+          schema:
+            type: string
+          required: true
+          description: Extended public key (XPUB) to derive addresses from.
+        - in: query
+          name: currency
+          schema:
+            type: string
+            example: BTC
+          required: true
+          description: Crypto currency symbol (must be supported by the rate API).
+        - in: query
+          name: fiat
+          schema:
+            type: string
+            example: USD
+          required: true
+          description: Fiat currency symbol.
+      responses:
+        "200":
+          description: Balance successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  value:
+                    type: number
+                    format: float
+                    description: Balance converted to fiat.
+                    example: 35000.25
+                  balance:
+                    type: number
+                    format: float
+                    description: Balance in BTC.
+                    example: 1.23456789
+        "400":
+          description: Invalid request (bad xpub or parameters)
+        "500":
+          description: Internal server error (Electrum or rate API issue)
