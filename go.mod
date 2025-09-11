@@ -3,11 +3,15 @@ module a
 go 1.25.0
 
 require (
+	github.com/airgap-solution/cmc-rest/openapi v1.0.0
+	github.com/airgap-solution/crypto-balance-rest/openapi v1.0.1
 	github.com/airgap-solution/go-pkg/mux v0.0.2-0.20250909162734-68e49279358b
 	github.com/btcsuite/btcd v0.24.2
 	github.com/btcsuite/btcd/btcec/v2 v2.3.5
 	github.com/btcsuite/btcd/btcutil v1.1.6
 	github.com/lamengao/go-electrum v0.0.0-20231031090039-0e19b90480c4
+	github.com/restartfu/coinmarketcap v0.0.0-20250909182121-2431ed5715d8
+	github.com/samber/lo v1.51.0
 )
 
 require (
@@ -17,6 +21,8 @@ require (
 	github.com/decred/dcrd/crypto/blake256 v1.0.0 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.0.1 // indirect
 	github.com/gorilla/mux v1.8.1 // indirect
+	github.com/gorilla/websocket v1.5.3 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/sys v0.0.0-20200814200057-3d37ad5750ed // indirect
+	golang.org/x/text v0.22.0 // indirect
 )
