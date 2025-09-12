@@ -4,14 +4,11 @@ import (
 	"a/internal/adapter/balance/bitcoin"
 	httpy "a/internal/adapter/http"
 	"a/internal/ports"
-	"context"
 	"net/http"
 	"strings"
 
 	cryptobalancerest "github.com/airgap-solution/crypto-balance-rest/openapi/servergen/go"
-	"github.com/lamengao/go-electrum/electrum"
 	"github.com/restartfu/coinmarketcap/coinmarketcap"
-	"github.com/samber/lo"
 
 	cmcrest "github.com/airgap-solution/cmc-rest/openapi/clientgen/go"
 )
@@ -23,7 +20,7 @@ func main() {
 	cmcRestClient := cmcrest.NewAPIClient(cfg)
 
 	balanceProviders := map[string]ports.BalanceProvider{
-		strings.ToLower(coinmarketcap.CurrencyBTC.String()): bitcoin.NewAdapter(lo.Must(electrum.NewClientTCP(context.Background(), "electrum.blockstream.info:50001"))),
+		strings.ToLower(coinmarketcap.CurrencyBTC.String()): bitcoin.NewAdapter("restartfu.com:5001"),
 	}
 
 	servicer := httpy.NewAdapter(*cmcRestClient, balanceProviders)

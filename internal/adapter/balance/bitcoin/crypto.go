@@ -105,12 +105,7 @@ func deriveTaprootAddresses(xpub string, externalCount, changeCount int) (extern
 	return external, change, nil
 }
 
-func getXpubBalance(node *electrum.Client, xpub string, externalCount, changeCount int) (btc float64, err error) {
-	external, change, err := deriveTaprootAddresses(xpub, externalCount, changeCount)
-	if err != nil {
-		return 0, err
-	}
-
+func getXpubBalance(node *electrum.Client, addresses []btcutil.Address) (btc float64, err error) {
 	totalSats := int64(0)
 
 	checkAddr := func(addr btcutil.Address) error {
@@ -129,12 +124,7 @@ func getXpubBalance(node *electrum.Client, xpub string, externalCount, changeCou
 		return nil
 	}
 
-	for _, a := range external {
-		if err := checkAddr(a); err != nil {
-			return 0, err
-		}
-	}
-	for _, a := range change {
+	for _, a := range addresses {
 		if err := checkAddr(a); err != nil {
 			return 0, err
 		}
