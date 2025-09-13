@@ -67,7 +67,7 @@ func (a *Adapter) Balance(xpub string) (float64, error) {
 	var lastErr error
 	for i := range 3 {
 		client := a.getClient()
-		if client == nil {
+		if client.IsShutdown() {
 			a.connectWithRetry()
 			continue
 		}
