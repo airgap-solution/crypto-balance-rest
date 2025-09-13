@@ -9,7 +9,7 @@ type Config struct {
 func DefaultConfig() Config {
 	return Config{
 		ListenAddr:   "restartfu.com:8987",
-		CMCRestAddr:  "https://restartfu.com:8765",
+		CMCRestAddr:  "restartfu.com:8765",
 		ElectrumAddr: "electrum.blockstream.info:50001",
 	}
 }
