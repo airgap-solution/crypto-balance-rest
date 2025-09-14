@@ -1,6 +1,6 @@
 {
   "name": "@airgap-solution/crypto-balance-rest-client",
-  "version": "1.0.21",
+  "version": "1.0.0",
   "description": "TypeScript client for AirGap Crypto Balance REST API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,6 @@
     "directory": "openapi/clientgen/ts"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org"
   }
 }
