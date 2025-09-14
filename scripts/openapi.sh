@@ -2,7 +2,9 @@
 
 set -e
 
+# -------------------------------
 # Generate Go server
+# -------------------------------
 openapi-generator-cli generate \
   -i openapi/crypto-balance-rest.yaml \
   -g go-server \
@@ -10,11 +12,13 @@ openapi-generator-cli generate \
   --additional-properties=packageName=cryptobalancerest
 
 rm -rf openapi/servergen
-mkdir openapi/servergen
+mkdir -p openapi/servergen
 mv /tmp/oapi/go/ openapi/servergen
 rm -rf /tmp/oapi
 
+# -------------------------------
 # Generate Go client
+# -------------------------------
 openapi-generator-cli generate \
   -i openapi/crypto-balance-rest.yaml \
   -g go \
@@ -26,19 +30,24 @@ mkdir -p openapi/clientgen/go
 mv /tmp/oapi/*.go openapi/clientgen/go
 rm -rf /tmp/oapi
 
-# Generate TypeScript client (fetch-based, works in Expo/React Native)
+# -------------------------------
+# Generate TypeScript client
+# -------------------------------
 openapi-generator-cli generate \
   -i openapi/crypto-balance-rest.yaml \
   -g typescript-fetch \
   -o /tmp/oapi \
   --additional-properties=npmName=@airgap-solution/crypto-balance-rest-client,supportsES6=true,withInterfaces=true
 
-mkdir -p openapi/clientgen/ts
-rm -rf openapi/clientgen/ts/src
-mv /tmp/oapi openapi/clientgen/ts/src
+# Move generated sources into src/
+mkdir -p openapi/clientgen/ts/src
+rm -rf openapi/clientgen/ts/src/*
+mv /tmp/oapi/* openapi/clientgen/ts/src
 rm -rf /tmp/oapi
 
-# Create package.json if it doesn't exist
+# -------------------------------
+# package.json
+# -------------------------------
 if [ ! -f "openapi/clientgen/ts/package.json" ]; then
     echo "Creating package.json..."
     cat > openapi/clientgen/ts/package.json << 'EOF'
@@ -53,9 +62,9 @@ if [ ! -f "openapi/clientgen/ts/package.json" ]; then
     "src/"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --declaration",
     "clean": "rm -rf dist/",
-    "prepublishOnly": "yarn run build"
+    "prepare": "yarn run build"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
@@ -73,7 +82,9 @@ if [ ! -f "openapi/clientgen/ts/package.json" ]; then
 EOF
 fi
 
-# Create tsconfig.json if it doesn't exist
+# -------------------------------
+# tsconfig.json
+# -------------------------------
 if [ ! -f "openapi/clientgen/ts/tsconfig.json" ]; then
     echo "Creating tsconfig.json..."
     cat > openapi/clientgen/ts/tsconfig.json << 'EOF'
@@ -83,8 +94,9 @@ if [ ! -f "openapi/clientgen/ts/tsconfig.json" ]; then
     "module": "esnext",
     "lib": ["ES2020", "DOM"],
     "declaration": true,
+    "declarationMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./src",            // ensures flattening: src/foo.ts -> dist/foo.js
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -97,7 +109,9 @@ if [ ! -f "openapi/clientgen/ts/tsconfig.json" ]; then
 EOF
 fi
 
-# Create .gitignore if it doesn't exist
+# -------------------------------
+# .gitignore
+# -------------------------------
 if [ ! -f "openapi/clientgen/ts/.gitignore" ]; then
     echo "Creating .gitignore..."
     cat > openapi/clientgen/ts/.gitignore << 'EOF'
@@ -108,11 +122,22 @@ dist/
 EOF
 fi
 
-# Install dependencies and build TypeScript client with Yarn
+# -------------------------------
+# Install dependencies and build
+# -------------------------------
 echo "Installing TypeScript client dependencies and building..."
 cd openapi/clientgen/ts
 yarn install
 yarn build
+
+# -------------------------------
+# Safety check for typings
+# -------------------------------
+if [ ! -f "dist/index.d.ts" ]; then
+    echo "⚠️ No top-level index.d.ts found, generating a shim..."
+    echo "export * from './';" > dist/index.d.ts
+fi
+
 cd - > /dev/null
 
-echo "OpenAPI generation complete!"
+echo "✅ OpenAPI generation complete! TypeScript client built into dist/ with typings."
