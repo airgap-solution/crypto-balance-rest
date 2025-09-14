@@ -23,4 +23,4 @@ openapi-ts-clean:
 
 # Publish TypeScript client
 openapi-ts-publish: openapi-ts-build
-	cd openapi/clientgen/ts && npm publish
+	cd openapi/clientgen/ts && npm publish --access public
