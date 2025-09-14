@@ -5,7 +5,7 @@
  *
  * Derives Taproot addresses from an XPUB, checks balances via Electrum, and converts to a fiat currency using an external crypto rate service. 
  *
- * API version: 1.0.0
+ * API version: 1.0.1
  */
 
 package cryptobalancerest
