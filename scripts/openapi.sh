@@ -26,7 +26,7 @@ mkdir -p openapi/clientgen/go
 mv /tmp/oapi/*.go openapi/clientgen/go
 rm -rf /tmp/oapi
 
-# Generate TypeScript client
+# Generate TypeScript client (fetch-based, works in Expo/React Native)
 openapi-generator-cli generate \
   -i openapi/crypto-balance-rest.yaml \
   -g typescript-fetch \
@@ -55,7 +55,7 @@ if [ ! -f "openapi/clientgen/ts/package.json" ]; then
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist/",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "yarn run build"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.7.0",
@@ -80,7 +80,7 @@ if [ ! -f "openapi/clientgen/ts/tsconfig.json" ]; then
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "esnext",
     "lib": ["ES2020", "DOM"],
     "declaration": true,
     "outDir": "./dist",
@@ -108,11 +108,11 @@ dist/
 EOF
 fi
 
-# Install dependencies and build TypeScript client
+# Install dependencies and build TypeScript client with Yarn
 echo "Installing TypeScript client dependencies and building..."
 cd openapi/clientgen/ts
-npm install
-npm run build
+yarn install
+yarn build
 cd - > /dev/null
 
 echo "OpenAPI generation complete!"
