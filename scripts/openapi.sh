@@ -35,7 +35,7 @@ rm -rf /tmp/oapi
 # -------------------------------
 openapi-generator-cli generate \
   -i openapi/crypto-balance-rest.yaml \
-  -g typescript-fetch \
+  -g typescript-axios \
   -o /tmp/oapi \
   --additional-properties=npmName=@airgap-solution/crypto-balance-rest-client,supportsES6=true,withInterfaces=true
 
@@ -96,7 +96,7 @@ if [ ! -f "openapi/clientgen/ts/tsconfig.json" ]; then
     "declaration": true,
     "declarationMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",            // ensures flattening: src/foo.ts -> dist/foo.js
+    "rootDir": "./src",         // ensures flattening: src/foo.ts -> dist/foo.js
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -131,7 +131,7 @@ yarn install
 yarn build
 
 # -------------------------------
-# Safety check for typings
+# Safety check for top-level typings
 # -------------------------------
 if [ ! -f "dist/index.d.ts" ]; then
     echo "⚠️ No top-level index.d.ts found, generating a shim..."
