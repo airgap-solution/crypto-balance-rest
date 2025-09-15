@@ -67,7 +67,7 @@ func main() {
 	handler := corsMiddleware(router)
 
 	if conf.TLSEnabled {
-		err = http.ListenAndServeTLS(conf.ListenAddr, "./assets/certificate.crt", "./assets/private.key", handler)
+		err = http.ListenAndServeTLS(conf.ListenAddr, conf.TLSConfig.CertificatePath, conf.TLSConfig.PrivateKeyPath, handler)
 	} else {
 		err = http.ListenAndServe(conf.ListenAddr, handler)
 	}
