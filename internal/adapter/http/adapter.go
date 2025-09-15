@@ -32,8 +32,9 @@ func (a *Adapter) BalanceGet(ctx context.Context, xpub string, currency string, 
 	}
 
 	return cryptobalancerest.Response(200, cryptobalancerest.BalanceGet200Response{
-		Value:   balance * lo.FromPtr(rate.Rate),
-		Balance: balance,
+		Value:     balance * lo.FromPtr(rate.Rate),
+		Balance:   balance,
+		Change24h: 0,
 	}), err
 
 }

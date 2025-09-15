@@ -3,6 +3,8 @@ github.com/airgap-solution/cmc-rest/openapi v1.0.0 h1:UiJr7EfMexxT08nJDxa6xx7NGo
 github.com/airgap-solution/cmc-rest/openapi v1.0.0/go.mod h1:8M1AuEAH9HCFs2wQfrBmj8dKPKD4erpj/NzLTwDOa9Q=
 github.com/airgap-solution/crypto-balance-rest/openapi v1.0.1 h1:GorS7CQO7I6mAWrFSSlDEEXA1DPdkHuoTN0hS1c092Y=
 github.com/airgap-solution/crypto-balance-rest/openapi v1.0.1/go.mod h1:Frwk937UdHQl2TXLCSCKcpEzMfPiC1RWGXxQjd9u4lo=
+github.com/airgap-solution/crypto-balance-rest/openapi v1.0.2 h1:eMt8H2dRJyCSoMRnvVFUscjABb/YqiGNZZQM9uzqUtg=
+github.com/airgap-solution/crypto-balance-rest/openapi v1.0.2/go.mod h1:Frwk937UdHQl2TXLCSCKcpEzMfPiC1RWGXxQjd9u4lo=
 github.com/btcsuite/btcd v0.20.1-beta/go.mod h1:wVuoA8VJLEcwgqHBwHmzLRazpKxTv13Px/pDuV7OomQ=
 github.com/btcsuite/btcd v0.22.0-beta.0.20220111032746-97732e52810c/go.mod h1:tjmYdS6MLJ5/s0Fj4DbLgSbDHbEqLJrtnHecBFkdz5M=
 github.com/btcsuite/btcd v0.23.5-0.20231215221805-96c9fd8078fd/go.mod h1:nm3Bko6zh6bWP60UxwoT5LzdGJsQJaPo6HjduXq9p6A=
