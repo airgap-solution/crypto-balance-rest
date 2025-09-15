@@ -1,0 +1,9 @@
+listen_addr = "restartfu.com:8987"
+cmc_rest_addr = "restartfu.com:8765"
+electrum_addr = "electrum.blockstream.info:50001"
+
+tls_enabled = true
+
+[tls_config]
+certificate_path = "/etc/letsencrypt/live/restartfu.com/fullchain.pem"
+private_key_path = "/etc/letsencrypt/live/restartfu.com/privkey.pem"
