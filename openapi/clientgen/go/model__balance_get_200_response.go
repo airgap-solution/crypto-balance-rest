@@ -1,7 +1,7 @@
 /*
 Crypto Balance API
 
-Derives addresses from an extended public key (XPUB) or equivalent, retrieves balances for a given cryptocurrency, and converts them to the requested fiat currency using an external rate service.
+Derives addresses from an extended public key (XPUB) or equivalent, retrieves balances for a given cryptocurrency, and converts them to the requested fiat currency using an external rate service. 
 
 API version: 1.0.2
 */
@@ -141,7 +141,7 @@ func (o *BalanceGet200Response) SetChange24h(v float64) {
 }
 
 func (o BalanceGet200Response) MarshalJSON() ([]byte, error) {
-	toSerialize, err := o.ToMap()
+	toSerialize,err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -197,3 +197,5 @@ func (v *NullableBalanceGet200Response) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
+
+

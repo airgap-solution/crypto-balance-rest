@@ -1,6 +1,8 @@
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=
 github.com/airgap-solution/cmc-rest/openapi v1.0.0 h1:UiJr7EfMexxT08nJDxa6xx7NGoxWl4VtzjoGVzh1GXY=
 github.com/airgap-solution/cmc-rest/openapi v1.0.0/go.mod h1:8M1AuEAH9HCFs2wQfrBmj8dKPKD4erpj/NzLTwDOa9Q=
+github.com/airgap-solution/cmc-rest/openapi v1.0.1 h1:5NeXGNSQrv+KY5j+rX15n10/r//uH6/I6wBOyX45oNc=
+github.com/airgap-solution/cmc-rest/openapi v1.0.1/go.mod h1:8M1AuEAH9HCFs2wQfrBmj8dKPKD4erpj/NzLTwDOa9Q=
 github.com/airgap-solution/crypto-balance-rest/openapi v1.0.1 h1:GorS7CQO7I6mAWrFSSlDEEXA1DPdkHuoTN0hS1c092Y=
 github.com/airgap-solution/crypto-balance-rest/openapi v1.0.1/go.mod h1:Frwk937UdHQl2TXLCSCKcpEzMfPiC1RWGXxQjd9u4lo=
 github.com/airgap-solution/crypto-balance-rest/openapi v1.0.2 h1:eMt8H2dRJyCSoMRnvVFUscjABb/YqiGNZZQM9uzqUtg=
