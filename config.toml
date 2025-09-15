@@ -1,8 +1,8 @@
-listen_addr = 'restartfu.com:8987'
+listen_addr = '192.168.2.130:8987'
 cmc_rest_addr = 'restartfu.com:8765'
 electrum_addr = 'electrum.blockstream.info:50001'
 kaspa_explorer_url = 'https://api.kaspa.org'
-tls_enabled = true
+tls_enabled = false
 
 [tls_config]
 certificate_path = '/etc/letsencrypt/live/restartfu.com/fullchain.pem'

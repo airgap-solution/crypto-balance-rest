@@ -1,6 +1,6 @@
 {
   "name": "@airgap-solution/crypto-balance-rest-client",
-  "version": "1.0.21",
+  "version": "1.0.2",
   "description": "OpenAPI client for @airgap-solution/crypto-balance-rest-client",
   "author": "OpenAPI-Generator Contributors",
   "repository": {

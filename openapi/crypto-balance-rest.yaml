@@ -1,39 +1,37 @@
 openapi: 3.0.3
 info:
-  title: Bitcoin Balance API
-  version: 1.0.1
+  title: Crypto Balance API
+  version: 1.0.2
+  # 1.0.2: Added change24h field, updated description for general cryptocurrency support
   # 1.0.1: Use doubles for fiat value and balance
-  # 1.0.0: Create contract
+  # 1.0.0: Initial contract
   description: |
-    Derives Taproot addresses from an XPUB, checks balances via Electrum,
-    and converts to a fiat currency using an external crypto rate service.
-
-servers:
-  - url: http://restartfu.com:8082
-  - url: http://192.168.2.130:8082
-  - url: http://localhost:8082
+    Derives addresses from an extended public key (XPUB) or equivalent,
+    retrieves balances for a given cryptocurrency, and converts them to
+    the requested fiat currency using an external rate service.
 
 paths:
   /balance:
     get:
-      summary: Get XPUB balance in BTC and fiat
+      summary: Get account balance in crypto and fiat
       description: |
-        Derives addresses from an XPUB, queries Electrum for balances,
-        and converts to the requested fiat currency using the crypto rate API.
+        Retrieves the balance for an extended public key (XPUB or equivalent),
+        calculates its value in the requested fiat currency, and returns
+        the current balance along with the 24-hour change in fiat value.
       parameters:
         - in: query
           name: xpub
           schema:
             type: string
           required: true
-          description: Extended public key (XPUB) to derive addresses from.
+          description: Extended public key to derive addresses from.
         - in: query
           name: currency
           schema:
             type: string
             example: BTC
           required: true
-          description: Crypto currency symbol (must be supported by the rate API).
+          description: Cryptocurrency symbol.
         - in: query
           name: fiat
           schema:
@@ -52,14 +50,19 @@ paths:
                   value:
                     type: number
                     format: double
-                    description: Balance converted to fiat.
+                    description: Balance converted to the requested fiat currency.
                     example: 35000.25
                   balance:
                     type: number
                     format: double
-                    description: Balance in BTC.
+                    description: Balance in the requested cryptocurrency.
                     example: 1.23456789
+                  change24h:
+                    type: number
+                    format: double
+                    description: Change in fiat value over the past 24 hours (positive = gain, negative = loss).
+                    example: -250.75
         "400":
-          description: Invalid request (bad xpub or parameters)
+          description: Invalid request (bad XPUB or parameters)
         "500":
-          description: Internal server error (Electrum or rate API issue)
+          description: Internal server error

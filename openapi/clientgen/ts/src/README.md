@@ -1,4 +1,4 @@
-## @airgap-solution/crypto-balance-rest-client@1.0.1
+## @airgap-solution/crypto-balance-rest-client@1.0.2
 
 This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios). The generated Node module can be used in the following environments:
 
@@ -36,7 +36,7 @@ navigate to the folder of your consuming project and run one of the following co
 _published:_
 
 ```
-npm install @airgap-solution/crypto-balance-rest-client@1.0.1 --save
+npm install @airgap-solution/crypto-balance-rest-client@1.0.2 --save
 ```
 
 _unPublished (not recommended):_
@@ -47,11 +47,11 @@ npm install PATH_TO_GENERATED_PACKAGE --save
 
 ### Documentation for API Endpoints
 
-All URIs are relative to *http://restartfu.com:8082*
+All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*DefaultApi* | [**balanceGet**](docs/DefaultApi.md#balanceget) | **GET** /balance | Get XPUB balance in BTC and fiat
+*DefaultApi* | [**balanceGet**](docs/DefaultApi.md#balanceget) | **GET** /balance | Get account balance in crypto and fiat
 
 
 ### Documentation For Models
