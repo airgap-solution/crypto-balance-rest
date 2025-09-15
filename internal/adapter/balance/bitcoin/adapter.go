@@ -56,7 +56,7 @@ func (a *Adapter) getClient() *electrum.Client {
 func (a *Adapter) Balance(xpub string) (float64, error) {
 	addresses, ok := a.addresses[xpub]
 	if !ok {
-		external, change, err := deriveTaprootAddresses(xpub, 10, 10)
+		external, change, err := deriveTaprootAddresses(xpub, 1000, 1000)
 		if err != nil {
 			return 0, err
 		}

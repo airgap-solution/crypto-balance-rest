@@ -4,61 +4,104 @@ import (
 	"a/internal/ports"
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
-
-	"github.com/kaspanet/kaspad/cmd/kaspawallet/libkaspawallet/bip32"
+	"sync"
 )
 
 var _ ports.BalanceProvider = (*Adapter)(nil)
 
 type Adapter struct {
-	explorerBaseURL string
+	explorerURL string
+	cache       map[string][]string
+	mu          sync.RWMutex
 }
 
-func NewAdapter(url string) *Adapter {
+func NewAdapter(explorerURL string) *Adapter {
 	return &Adapter{
-		explorerBaseURL: url,
+		explorerURL: explorerURL,
+		cache:       make(map[string][]string),
 	}
 }
 
 func (a *Adapter) Balance(kpub string) (float64, error) {
-	xpub, err := bip32.DeserializeExtendedKey(kpub)
+	a.mu.RLock()
+	addresses, ok := a.cache[kpub]
+	a.mu.RUnlock()
+
+	if !ok {
+		recv, change, err := deriveAddresses(kpub, 1000, 1000)
+		if err != nil {
+			return 0, err
+		}
+
+		addresses = append(recv, change...)
+
+		a.mu.Lock()
+		a.cache[kpub] = addresses
+		a.mu.Unlock()
+	}
+
+	res, err := a.fetchBalances(addresses)
 	if err != nil {
 		return 0, err
 	}
 
-	allAddresses, err := a.generateAllAddresses(xpub)
-	if err != nil {
-		return 0, err
+	var bal float64
+	for _, r := range res {
+		bal += r.Balance / 1e8
 	}
-
-	return a.getMultipleAddressBalances(allAddresses)
+	return bal, nil
 }
 
-func (a *Adapter) getMultipleAddressBalances(addresses []string) (float64, error) {
-	requestBody := map[string]interface{}{
+type balanceResponse struct {
+	Address string  `json:"address"`
+	Balance float64 `json:"balance"`
+}
+
+func (a *Adapter) fetchBalances(addresses []string) ([]balanceResponse, error) {
+	payload := map[string][]string{
 		"addresses": addresses,
 	}
 
-	jsonData, err := json.Marshal(requestBody)
+	data, err := json.Marshal(payload)
 	if err != nil {
-		return 0, err
+		return nil, fmt.Errorf("failed to marshal payload: %w", err)
 	}
 
-	resp, err := http.Post(a.explorerBaseURL+"addresses/balances", "application/json", bytes.NewBuffer(jsonData))
+	respBody, err := postJSON(a.explorerURL, data)
 	if err != nil {
-		return 0, err
+		return nil, err
+	}
+
+	var result []balanceResponse
+	if err := json.Unmarshal(respBody, &result); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
+	}
+
+	return result, nil
+}
+
+func postJSON(url string, data []byte) ([]byte, error) {
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
-	var response struct {
-		Address string  `json:"address"`
-		Balance float64 `json:"balance"`
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("unexpected status %d: %s", resp.StatusCode, string(body))
 	}
 
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return 0, err
-	}
-
-	return response.Balance, nil
+	return io.ReadAll(resp.Body)
 }

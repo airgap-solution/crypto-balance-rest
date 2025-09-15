@@ -1,70 +1,66 @@
 package kaspa
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
+	"log"
 
-	"github.com/kaspanet/go-secp256k1"
-	"github.com/kaspanet/kaspad/cmd/kaspawallet/libkaspawallet/bip32"
+	"github.com/btcsuite/btcd/btcutil/hdkeychain"
+	"github.com/kaspanet/kaspad/util"
 )
 
-func (a *Adapter) generateAllAddresses(masterKey *bip32.ExtendedKey) ([]string, error) {
-	var allAddresses []string
-
-	receiveAddresses, err := a.generateAddresses(masterKey, 0, 10)
+func deriveAddresses(xpub string, nRecv, nChange int) (recvAddrs, changeAddrs []string, err error) {
+	key, err := hdkeychain.NewKeyFromString(xpub)
 	if err != nil {
-		return nil, err
-	}
-	allAddresses = append(allAddresses, receiveAddresses...)
-
-	changeAddresses, err := a.generateAddresses(masterKey, 1, 10)
-	if err != nil {
-		return nil, err
-	}
-	allAddresses = append(allAddresses, changeAddresses...)
-
-	return allAddresses, nil
-}
-
-func (a *Adapter) generateAddresses(masterKey *bip32.ExtendedKey, purpose uint32, count int) ([]string, error) {
-	addresses := make([]string, 0, count)
-
-	purposeKey, err := masterKey.Child(purpose)
-	if err != nil {
-		return nil, err
+		return nil, nil, fmt.Errorf("invalid xpub: %w", err)
 	}
 
-	for i := 0; i < count; i++ {
-		childKey, err := purposeKey.Child(uint32(i))
-		if err != nil {
-			return nil, err
+	prefix := util.Bech32PrefixKaspa
+
+	recvBranch, err := key.Derive(0)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to derive receive branch: %w", err)
+	}
+	changeBranch, err := key.Derive(1)
+	if err != nil {
+		return nil, nil, fmt.Errorf("failed to derive change branch: %w", err)
+	}
+
+	deriveAddrs := func(branch *hdkeychain.ExtendedKey, count int) []string {
+		addrs := make([]string, 0, count)
+		for i := 0; i < count; i++ {
+			child, err := branch.Derive(uint32(i))
+			if err != nil {
+				log.Printf("Skipping index %d due to derivation error: %s\n", i, err)
+				continue
+			}
+
+			pubKey, err := child.ECPubKey()
+			if err != nil {
+				log.Printf("Skipping index %d due to pubkey error: %s\n", i, err)
+				continue
+			}
+
+			pubKeyBytes := pubKey.SerializeCompressed()
+			if len(pubKeyBytes) != 33 {
+				log.Printf("Skipping index %d, pubkey length %d not 33\n", i, len(pubKeyBytes))
+				continue
+			}
+
+			schnorrPubKey := pubKeyBytes[1:]
+
+			addr, err := util.NewAddressPublicKey(schnorrPubKey, prefix)
+			if err != nil {
+				log.Printf("Skipping index %d, failed to create address: %s\n", i, err)
+				continue
+			}
+
+			addrs = append(addrs, addr.EncodeAddress())
 		}
-
-		publicKey, err := childKey.PublicKey()
-		if err != nil {
-			return nil, err
-		}
-
-		address, err := a.publicKeyToAddress(publicKey)
-		if err != nil {
-			return nil, err
-		}
-
-		addresses = append(addresses, address)
+		return addrs
 	}
 
-	return addresses, nil
-}
+	recvAddrs = deriveAddrs(recvBranch, nRecv)
+	changeAddrs = deriveAddrs(changeBranch, nChange)
 
-func (a *Adapter) publicKeyToAddress(publicKey *secp256k1.ECDSAPublicKey) (string, error) {
-	serializedPubKey, err := publicKey.Serialize()
-	if err != nil {
-		return "", err
-	}
-
-	hash := sha256.Sum256(serializedPubKey[:])
-	addressBytes := hash[:20]
-
-	return fmt.Sprintf("kaspa:%s", hex.EncodeToString(addressBytes)), nil
+	return recvAddrs, changeAddrs, nil
 }
