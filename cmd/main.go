@@ -53,7 +53,7 @@ func main() {
 
 	balanceProviders := map[string]ports.BalanceProvider{
 		strings.ToLower(coinmarketcap.CurrencyBTC.String()): bitcoin.NewAdapter(conf.ElectrumAddr),
-		strings.ToLower(coinmarketcap.CurrencyKAS.String()): kaspa.NewAdapter("https://api.kaspa.org/addresses/balances"),
+		strings.ToLower(coinmarketcap.CurrencyKAS.String()): kaspa.NewAdapter(conf.KaspaExplorerURL),
 	}
 
 	servicer := httpy.NewAdapter(*cmcRestClient, balanceProviders)

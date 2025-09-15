@@ -70,7 +70,7 @@ func (a *Adapter) fetchBalances(addresses []string) ([]balanceResponse, error) {
 		return nil, fmt.Errorf("failed to marshal payload: %w", err)
 	}
 
-	respBody, err := postJSON(a.explorerURL, data)
+	respBody, err := postJSON(a.explorerURL+"/addresses/balances", data)
 	if err != nil {
 		return nil, err
 	}
